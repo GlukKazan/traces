@@ -1,0 +1,704 @@
+
+TKPROF: Release 10.2.0.3.0 - Production on Wed Oct 23 12:03:56 2013
+
+Copyright (c) 1982, 2005, Oracle.  All rights reserved.
+
+Trace file: collection.trc
+Sort options: default
+
+********************************************************************************
+count    = number of times OCI procedure was executed
+cpu      = cpu time in seconds executing 
+elapsed  = elapsed time in seconds executing
+disk     = number of physical reads of buffers from disk
+query    = number of buffers gotten for consistent read
+current  = number of buffers gotten in current mode (usually for update)
+rows     = number of rows processed by the fetch or execute call
+********************************************************************************
+
+begin :1 := dbms_pickler.get_type_shape(:2,:3,:4,:5,:6,:7);       :8 := 
+  dbms_pickler.get_format(:9); end;
+
+
+call     count       cpu    elapsed       disk      query    current        rows
+------- ------  -------- ---------- ---------- ---------- ----------  ----------
+Parse        1      0.00       0.00          0          0          0           0
+Execute      1      0.01       0.01          0         35          0           1
+Fetch        0      0.00       0.00          0          0          0           0
+------- ------  -------- ---------- ---------- ---------- ----------  ----------
+total        2      0.01       0.01          0         35          0           1
+
+Misses in library cache during parse: 0
+Optimizer mode: ALL_ROWS
+Parsing user id: 977  
+
+Elapsed times include waiting on following events:
+  Event waited on                             Times   Max. Wait  Total Waited
+  ----------------------------------------   Waited  ----------  ------------
+  SQL*Net message to client                       1        0.00          0.00
+  SQL*Net message from client                     1        0.04          0.04
+********************************************************************************
+
+select i.obj#,i.ts#,i.file#,i.block#,i.intcols,i.type#,i.flags,i.property,
+  i.pctfree$,i.initrans,i.maxtrans,i.blevel,i.leafcnt,i.distkey,i.lblkkey,
+  i.dblkkey,i.clufac,i.cols,i.analyzetime,i.samplesize,i.dataobj#,
+  nvl(i.degree,1),nvl(i.instances,1),i.rowcnt,mod(i.pctthres$,256),
+  i.indmethod#,i.trunccnt,nvl(c.unicols,0),nvl(c.deferrable#+c.valid#,0),
+  nvl(i.spare1,i.intcols),i.spare4,i.spare2,i.spare6,decode(i.pctthres$,null,
+  null,mod(trunc(i.pctthres$/256),256)),ist.cachedblk,ist.cachehit,
+  ist.logicalread 
+from
+ ind$ i, ind_stats$ ist, (select enabled, min(cols) unicols,
+  min(to_number(bitand(defer,1))) deferrable#,min(to_number(bitand(defer,4))) 
+  valid# from cdef$ where obj#=:1 and enabled > 1 group by enabled) c where 
+  i.obj#=c.enabled(+) and i.obj# = ist.obj#(+) and i.bo#=:1 order by i.obj#
+
+
+call     count       cpu    elapsed       disk      query    current        rows
+------- ------  -------- ---------- ---------- ---------- ----------  ----------
+Parse        1      0.00       0.00          0          0          0           0
+Execute      1      0.00       0.00          0          0          0           0
+Fetch        2      0.00       0.00          0          8          0           1
+------- ------  -------- ---------- ---------- ---------- ----------  ----------
+total        4      0.00       0.00          0          8          0           1
+
+Misses in library cache during parse: 1
+Misses in library cache during execute: 1
+Optimizer mode: CHOOSE
+Parsing user id: SYS   (recursive depth: 2)
+
+Rows     Row Source Operation
+-------  ---------------------------------------------------
+      1  SORT ORDER BY (cr=8 pr=0 pw=0 time=769 us)
+      1   HASH JOIN OUTER (cr=8 pr=0 pw=0 time=713 us)
+      1    NESTED LOOPS OUTER (cr=5 pr=0 pw=0 time=121 us)
+      1     TABLE ACCESS CLUSTER IND$ (cr=4 pr=0 pw=0 time=100 us)
+      1      INDEX UNIQUE SCAN I_OBJ# (cr=2 pr=0 pw=0 time=48 us)(object id 3)
+      0     TABLE ACCESS BY INDEX ROWID IND_STATS$ (cr=1 pr=0 pw=0 time=14 us)
+      0      INDEX UNIQUE SCAN I_IND_STATS$_OBJ# (cr=1 pr=0 pw=0 time=10 us)(object id 711)
+      0    VIEW  (cr=3 pr=0 pw=0 time=110 us)
+      0     SORT GROUP BY (cr=3 pr=0 pw=0 time=108 us)
+      0      TABLE ACCESS CLUSTER CDEF$ (cr=3 pr=0 pw=0 time=59 us)
+      1       INDEX UNIQUE SCAN I_COBJ# (cr=2 pr=0 pw=0 time=34 us)(object id 30)
+
+********************************************************************************
+
+select pos#,intcol#,col#,spare1,bo#,spare2 
+from
+ icol$ where obj#=:1
+
+
+call     count       cpu    elapsed       disk      query    current        rows
+------- ------  -------- ---------- ---------- ---------- ----------  ----------
+Parse        1      0.00       0.00          0          0          0           0
+Execute      1      0.00       0.00          0          0          0           0
+Fetch        2      0.00       0.00          0          4          0           1
+------- ------  -------- ---------- ---------- ---------- ----------  ----------
+total        4      0.00       0.00          0          4          0           1
+
+Misses in library cache during parse: 1
+Misses in library cache during execute: 1
+Optimizer mode: CHOOSE
+Parsing user id: SYS   (recursive depth: 2)
+
+Rows     Row Source Operation
+-------  ---------------------------------------------------
+      1  TABLE ACCESS BY INDEX ROWID ICOL$ (cr=4 pr=0 pw=0 time=57 us)
+      1   INDEX RANGE SCAN I_ICOL1 (cr=3 pr=0 pw=0 time=67 us)(object id 40)
+
+********************************************************************************
+
+select name,intcol#,segcol#,type#,length,nvl(precision#,0),decode(type#,2,
+  nvl(scale,-127/*MAXSB1MINAL*/),178,scale,179,scale,180,scale,181,scale,182,
+  scale,183,scale,231,scale,0),null$,fixedstorage,nvl(deflength,0),default$,
+  rowid,col#,property, nvl(charsetid,0),nvl(charsetform,0),spare1,spare2,
+  nvl(spare3,0) 
+from
+ col$ where obj#=:1 order by intcol#
+
+
+call     count       cpu    elapsed       disk      query    current        rows
+------- ------  -------- ---------- ---------- ---------- ----------  ----------
+Parse        1      0.00       0.00          0          0          0           0
+Execute      1      0.00       0.00          0          0          0           0
+Fetch        4      0.00       0.00          0          3          0           3
+------- ------  -------- ---------- ---------- ---------- ----------  ----------
+total        6      0.00       0.00          0          3          0           3
+
+Misses in library cache during parse: 1
+Misses in library cache during execute: 1
+Optimizer mode: CHOOSE
+Parsing user id: SYS   (recursive depth: 2)
+
+Rows     Row Source Operation
+-------  ---------------------------------------------------
+      3  SORT ORDER BY (cr=3 pr=0 pw=0 time=57 us)
+      3   TABLE ACCESS CLUSTER COL$ (cr=3 pr=0 pw=0 time=27 us)
+      1    INDEX UNIQUE SCAN I_OBJ# (cr=2 pr=0 pw=0 time=11 us)(object id 3)
+
+********************************************************************************
+
+select obj#,type#,ctime,mtime,stime,status,dataobj#,flags,oid$, spare1, 
+  spare2 
+from
+ obj$ where owner#=:1 and name=:2 and namespace=:3 and remoteowner is null 
+  and linkname is null and subname is null
+
+
+call     count       cpu    elapsed       disk      query    current        rows
+------- ------  -------- ---------- ---------- ---------- ----------  ----------
+Parse        1      0.00       0.00          0          0          0           0
+Execute      1      0.00       0.00          0          0          0           0
+Fetch        1      0.00       0.00          0          4          0           1
+------- ------  -------- ---------- ---------- ---------- ----------  ----------
+total        3      0.00       0.00          0          4          0           1
+
+Misses in library cache during parse: 1
+Misses in library cache during execute: 1
+Optimizer mode: CHOOSE
+Parsing user id: SYS   (recursive depth: 2)
+
+Rows     Row Source Operation
+-------  ---------------------------------------------------
+      1  TABLE ACCESS BY INDEX ROWID OBJ$ (cr=4 pr=0 pw=0 time=77 us)
+      1   INDEX RANGE SCAN I_OBJ2 (cr=3 pr=0 pw=0 time=59 us)(object id 37)
+
+********************************************************************************
+
+select /*+ rule */ bucket_cnt, row_cnt, cache_cnt, null_cnt, timestamp#, 
+  sample_size, minimum, maximum, distcnt, lowval, hival, density, col#, 
+  spare1, spare2, avgcln 
+from
+ hist_head$ where obj#=:1 and intcol#=:2
+
+
+call     count       cpu    elapsed       disk      query    current        rows
+------- ------  -------- ---------- ---------- ---------- ----------  ----------
+Parse        1      0.00       0.00          0          0          0           0
+Execute      2      0.00       0.00          0          0          0           0
+Fetch        2      0.00       0.00          0          8          0           2
+------- ------  -------- ---------- ---------- ---------- ----------  ----------
+total        5      0.00       0.00          0          8          0           2
+
+Misses in library cache during parse: 1
+Misses in library cache during execute: 1
+Optimizer mode: RULE
+Parsing user id: SYS   (recursive depth: 2)
+
+Rows     Row Source Operation
+-------  ---------------------------------------------------
+      1  TABLE ACCESS BY INDEX ROWID HIST_HEAD$ (cr=4 pr=0 pw=0 time=107 us)
+      1   INDEX RANGE SCAN I_HH_OBJ#_INTCOL# (cr=3 pr=0 pw=0 time=85 us)(object id 257)
+
+********************************************************************************
+
+select metadata 
+from
+ kopm$  where name='DB_FDO'
+
+
+call     count       cpu    elapsed       disk      query    current        rows
+------- ------  -------- ---------- ---------- ---------- ----------  ----------
+Parse        1      0.00       0.00          0          0          0           0
+Execute      1      0.00       0.00          0          0          0           0
+Fetch        1      0.00       0.00          0          2          0           1
+------- ------  -------- ---------- ---------- ---------- ----------  ----------
+total        3      0.00       0.00          0          2          0           1
+
+Misses in library cache during parse: 1
+Optimizer mode: CHOOSE
+Parsing user id: SYS   (recursive depth: 1)
+
+Rows     Row Source Operation
+-------  ---------------------------------------------------
+      1  TABLE ACCESS BY INDEX ROWID KOPM$ (cr=2 pr=0 pw=0 time=38 us)
+      1   INDEX UNIQUE SCAN I_KOPM1 (cr=1 pr=0 pw=0 time=21 us)(object id 365)
+
+********************************************************************************
+
+begin :1 := dbms_pickler.get_type_shape(:2,:3,:4,:5,:6,:7); end;
+
+
+call     count       cpu    elapsed       disk      query    current        rows
+------- ------  -------- ---------- ---------- ---------- ----------  ----------
+Parse        1      0.00       0.00          0          0          0           0
+Execute      1      0.00       0.00          0          3          0           1
+Fetch        0      0.00       0.00          0          0          0           0
+------- ------  -------- ---------- ---------- ---------- ----------  ----------
+total        2      0.00       0.00          0          3          0           1
+
+Misses in library cache during parse: 0
+Optimizer mode: ALL_ROWS
+Parsing user id: 977  
+
+Elapsed times include waiting on following events:
+  Event waited on                             Times   Max. Wait  Total Waited
+  ----------------------------------------   Waited  ----------  ------------
+  SQL*Net message to client                       1        0.00          0.00
+  SQL*Net message from client                     1        0.00          0.00
+********************************************************************************
+
+SELECT INSTANTIABLE, supertype_owner, supertype_name, LOCAL_ATTRIBUTES 
+FROM
+ all_types WHERE type_name = :1 AND owner = :2 
+
+
+call     count       cpu    elapsed       disk      query    current        rows
+------- ------  -------- ---------- ---------- ---------- ----------  ----------
+Parse        1      0.00       0.00          0          0          0           0
+Execute      1      0.00       0.01          0          2          0           0
+Fetch        1      0.00       0.00          0          9          0           1
+------- ------  -------- ---------- ---------- ---------- ----------  ----------
+total        3      0.00       0.01          0         11          0           1
+
+Misses in library cache during parse: 1
+Misses in library cache during execute: 1
+Optimizer mode: ALL_ROWS
+Parsing user id: 977  
+
+Rows     Row Source Operation
+-------  ---------------------------------------------------
+      1  VIEW  ALL_TYPES (cr=9 pr=0 pw=0 time=327 us)
+      1   SORT UNIQUE (cr=9 pr=0 pw=0 time=322 us)
+      1    UNION-ALL  (cr=9 pr=0 pw=0 time=280 us)
+      1     FILTER  (cr=9 pr=0 pw=0 time=262 us)
+      1      NESTED LOOPS OUTER (cr=9 pr=0 pw=0 time=252 us)
+      1       NESTED LOOPS OUTER (cr=9 pr=0 pw=0 time=242 us)
+      1        NESTED LOOPS  (cr=9 pr=0 pw=0 time=233 us)
+      1         NESTED LOOPS  (cr=6 pr=0 pw=0 time=130 us)
+      1          TABLE ACCESS BY INDEX ROWID USER$ (cr=2 pr=0 pw=0 time=52 us)
+      1           INDEX UNIQUE SCAN I_USER1 (cr=1 pr=0 pw=0 time=29 us)(object id 44)
+      1          TABLE ACCESS BY INDEX ROWID OBJ$ (cr=4 pr=0 pw=0 time=75 us)
+      1           INDEX RANGE SCAN I_OBJ2 (cr=3 pr=0 pw=0 time=46 us)(object id 37)
+      1         TABLE ACCESS BY INDEX ROWID TYPE$ (cr=3 pr=0 pw=0 time=98 us)
+      1          INDEX UNIQUE SCAN I_TYPE2 (cr=2 pr=0 pw=0 time=75 us)(object id 185)
+      0        TABLE ACCESS BY INDEX ROWID OBJ$ (cr=0 pr=0 pw=0 time=4 us)
+      0         INDEX RANGE SCAN I_OBJ3 (cr=0 pr=0 pw=0 time=2 us)(object id 38)
+      0       TABLE ACCESS CLUSTER USER$ (cr=0 pr=0 pw=0 time=5 us)
+      0        INDEX UNIQUE SCAN I_USER# (cr=0 pr=0 pw=0 time=2 us)(object id 11)
+      0      NESTED LOOPS  (cr=0 pr=0 pw=0 time=0 us)
+      0       INDEX RANGE SCAN I_OBJAUTH1 (cr=0 pr=0 pw=0 time=0 us)(object id 103)
+      0       FIXED TABLE FULL X$KZSRO (cr=0 pr=0 pw=0 time=0 us)
+      0      FIXED TABLE FULL X$KZSPR (cr=0 pr=0 pw=0 time=0 us)
+      0     FILTER  (cr=0 pr=0 pw=0 time=4 us)
+      0      FILTER  (cr=0 pr=0 pw=0 time=2 us)
+      0       NESTED LOOPS OUTER (cr=0 pr=0 pw=0 time=0 us)
+      0        NESTED LOOPS OUTER (cr=0 pr=0 pw=0 time=0 us)
+      0         MERGE JOIN CARTESIAN (cr=0 pr=0 pw=0 time=0 us)
+      0          NESTED LOOPS  (cr=0 pr=0 pw=0 time=0 us)
+      0           TABLE ACCESS BY INDEX ROWID OBJ$ (cr=0 pr=0 pw=0 time=0 us)
+      0            INDEX SKIP SCAN I_OBJ2 (cr=0 pr=0 pw=0 time=0 us)(object id 37)
+      0           TABLE ACCESS BY INDEX ROWID TYPE$ (cr=0 pr=0 pw=0 time=0 us)
+      0            INDEX UNIQUE SCAN I_TYPE2 (cr=0 pr=0 pw=0 time=0 us)(object id 185)
+      0          BUFFER SORT (cr=0 pr=0 pw=0 time=0 us)
+      0           INDEX FULL SCAN I_USER1 (cr=0 pr=0 pw=0 time=0 us)(object id 44)
+      0         TABLE ACCESS BY INDEX ROWID OBJ$ (cr=0 pr=0 pw=0 time=0 us)
+      0          INDEX RANGE SCAN I_OBJ3 (cr=0 pr=0 pw=0 time=0 us)(object id 38)
+      0        TABLE ACCESS CLUSTER USER$ (cr=0 pr=0 pw=0 time=0 us)
+      0         INDEX UNIQUE SCAN I_USER# (cr=0 pr=0 pw=0 time=0 us)(object id 11)
+      0      NESTED LOOPS  (cr=0 pr=0 pw=0 time=0 us)
+      0       INDEX RANGE SCAN I_OBJAUTH1 (cr=0 pr=0 pw=0 time=0 us)(object id 103)
+      0       FIXED TABLE FULL X$KZSRO (cr=0 pr=0 pw=0 time=0 us)
+      0      FIXED TABLE FULL X$KZSPR (cr=0 pr=0 pw=0 time=0 us)
+
+
+Elapsed times include waiting on following events:
+  Event waited on                             Times   Max. Wait  Total Waited
+  ----------------------------------------   Waited  ----------  ------------
+  SQL*Net message to client                       2        0.00          0.00
+  SQL*Net message from client                     2        0.06          0.06
+********************************************************************************
+
+select text 
+from
+ view$ where rowid=:1
+
+
+call     count       cpu    elapsed       disk      query    current        rows
+------- ------  -------- ---------- ---------- ---------- ----------  ----------
+Parse        1      0.00       0.00          0          0          0           0
+Execute      1      0.00       0.00          0          0          0           0
+Fetch        1      0.00       0.00          1          2          0           1
+------- ------  -------- ---------- ---------- ---------- ----------  ----------
+total        3      0.00       0.00          1          2          0           1
+
+Misses in library cache during parse: 1
+Misses in library cache during execute: 1
+Optimizer mode: CHOOSE
+Parsing user id: SYS   (recursive depth: 1)
+
+Rows     Row Source Operation
+-------  ---------------------------------------------------
+      1  TABLE ACCESS BY USER ROWID VIEW$ (cr=1 pr=1 pw=0 time=706 us)
+
+
+Elapsed times include waiting on following events:
+  Event waited on                             Times   Max. Wait  Total Waited
+  ----------------------------------------   Waited  ----------  ------------
+  db file sequential read                         1        0.00          0.00
+********************************************************************************
+
+begin ae_monitoring.addValues(:1); end;
+
+
+call     count       cpu    elapsed       disk      query    current        rows
+------- ------  -------- ---------- ---------- ---------- ----------  ----------
+Parse        1      0.00       0.00          0          0          0           0
+Execute      1      4.33       4.27          5     136013       6610           1
+Fetch        0      0.00       0.00          0          0          0           0
+------- ------  -------- ---------- ---------- ---------- ----------  ----------
+total        2      4.33       4.27          5     136013       6610           1
+
+Misses in library cache during parse: 1
+Misses in library cache during execute: 1
+Optimizer mode: ALL_ROWS
+Parsing user id: 977  
+
+Elapsed times include waiting on following events:
+  Event waited on                             Times   Max. Wait  Total Waited
+  ----------------------------------------   Waited  ----------  ------------
+  SQL*Net more data from client                  41        0.00          0.00
+  SQL*Net message to client                       1        0.00          0.00
+  SQL*Net message from client                     1        0.00          0.00
+********************************************************************************
+
+SELECT D.TYPE_ID, R.OWNER_ID 
+FROM
+ AE_PROFILE_DETAIL D INNER JOIN AE_RESOURCE_TYPE R ON (R.ID = D.TYPE_ID) 
+  WHERE D.PROFILE_ID = :B2 AND D.PARAM_ID = :B1 
+
+
+call     count       cpu    elapsed       disk      query    current        rows
+------- ------  -------- ---------- ---------- ---------- ----------  ----------
+Parse        1      0.00       0.00          0          0          0           0
+Execute   3000      0.32       0.35          0          0          0           0
+Fetch     3000      0.08       0.08          0      12000          0        3000
+------- ------  -------- ---------- ---------- ---------- ----------  ----------
+total     6001      0.41       0.44          0      12000          0        3000
+
+Misses in library cache during parse: 0
+Optimizer mode: ALL_ROWS
+Parsing user id: 977     (recursive depth: 1)
+
+Rows     Row Source Operation
+-------  ---------------------------------------------------
+   3000  NESTED LOOPS  (cr=12000 pr=0 pw=0 time=93428 us)
+   3000   TABLE ACCESS BY INDEX ROWID AE_PROFILE_DETAIL (cr=6000 pr=0 pw=0 time=49225 us)
+   3000    INDEX RANGE SCAN AE_PROFILE_DETAIL_PARAM_FK (cr=3000 pr=0 pw=0 time=27427 us)(object id 824918)
+   3000   TABLE ACCESS BY INDEX ROWID AE_RESOURCE_TYPE (cr=6000 pr=0 pw=0 time=30294 us)
+   3000    INDEX UNIQUE SCAN AE_RESOURCE_TYPE_PK (cr=3000 pr=0 pw=0 time=14086 us)(object id 823579)
+
+********************************************************************************
+
+SELECT R.ID, R.NAME 
+FROM
+ AE_RESOURCE R WHERE R.DEVICE_ID = :B3 AND R.RES_NUM = :B2 AND R.TYPE_ID = 
+  :B1 AND R.START_DATE <= SYSDATE AND SYSDATE <= NVL(R.END_DATE, SYSDATE + 1)
+
+
+call     count       cpu    elapsed       disk      query    current        rows
+------- ------  -------- ---------- ---------- ---------- ----------  ----------
+Parse        1      0.00       0.00          0          0          0           0
+Execute   3000      0.44       0.42          0          0          0           0
+Fetch     3000      0.22       0.23          0      89000          0        3000
+------- ------  -------- ---------- ---------- ---------- ----------  ----------
+total     6001      0.67       0.65          0      89000          0        3000
+
+Misses in library cache during parse: 0
+Misses in library cache during execute: 1
+Optimizer mode: ALL_ROWS
+Parsing user id: 977     (recursive depth: 1)
+
+Rows     Row Source Operation
+-------  ---------------------------------------------------
+   3000  TABLE ACCESS BY INDEX ROWID AE_RESOURCE (cr=89000 pr=0 pw=0 time=231911 us)
+ 102000   INDEX RANGE SCAN AE_RES_DEV_TYPE_FK (cr=86000 pr=0 pw=0 time=257510 us)(object id 823581)
+
+********************************************************************************
+
+SELECT S.VALUE 
+FROM
+ AE_STATE S WHERE S.RES_ID = :B2 AND S.PARAM_ID = :B1 
+
+
+call     count       cpu    elapsed       disk      query    current        rows
+------- ------  -------- ---------- ---------- ---------- ----------  ----------
+Parse        1      0.00       0.00          0          0          0           0
+Execute   2000      0.20       0.20          0          0          0           0
+Fetch     2000      0.02       0.03          0       5899          0        1899
+------- ------  -------- ---------- ---------- ---------- ----------  ----------
+total     4001      0.22       0.23          0       5899          0        1899
+
+Misses in library cache during parse: 0
+Optimizer mode: ALL_ROWS
+Parsing user id: 977     (recursive depth: 1)
+
+Rows     Row Source Operation
+-------  ---------------------------------------------------
+   1899  TABLE ACCESS BY INDEX ROWID AE_STATE (cr=5899 pr=0 pw=0 time=32257 us)
+   1899   INDEX RANGE SCAN AE_STATE_RES_FK (cr=4000 pr=0 pw=0 time=17739 us)(object id 813807)
+
+********************************************************************************
+
+SELECT L.TYPE_ID, L.ID 
+FROM
+ AE_PARAMETER P INNER JOIN AE_DOMAIN D ON (D.ID = P.DOMAIN_ID) INNER JOIN 
+  AE_STATE_POLICY L ON (L.ID = D.POLICY_ID) WHERE P.ID = :B1 
+
+
+call     count       cpu    elapsed       disk      query    current        rows
+------- ------  -------- ---------- ---------- ---------- ----------  ----------
+Parse        1      0.00       0.00          0          0          0           0
+Execute   2000      0.14       0.14          0          0          0           0
+Fetch     2000      0.07       0.07          0      12000          0        2000
+------- ------  -------- ---------- ---------- ---------- ----------  ----------
+total     4001      0.21       0.21          0      12000          0        2000
+
+Misses in library cache during parse: 0
+Optimizer mode: ALL_ROWS
+Parsing user id: 977     (recursive depth: 1)
+
+Rows     Row Source Operation
+-------  ---------------------------------------------------
+   2000  NESTED LOOPS  (cr=12000 pr=0 pw=0 time=76757 us)
+   2000   NESTED LOOPS  (cr=8000 pr=0 pw=0 time=52247 us)
+   2000    TABLE ACCESS BY INDEX ROWID AE_PARAMETER (cr=4000 pr=0 pw=0 time=26209 us)
+   2000     INDEX UNIQUE SCAN AE_PARAMETER_PK (cr=2000 pr=0 pw=0 time=13964 us)(object id 812977)
+   2000    TABLE ACCESS BY INDEX ROWID AE_DOMAIN (cr=4000 pr=0 pw=0 time=17395 us)
+   2000     INDEX UNIQUE SCAN AE_DOMAIN_PK (cr=2000 pr=0 pw=0 time=7485 us)(object id 814562)
+   2000   TABLE ACCESS BY INDEX ROWID AE_STATE_POLICY (cr=4000 pr=0 pw=0 time=15696 us)
+   2000    INDEX UNIQUE SCAN AE_STATE_POLICY_PK (cr=2000 pr=0 pw=0 time=6738 us)(object id 826206)
+
+********************************************************************************
+
+SELECT COUNT(*) 
+FROM
+ AE_THRESHOLD T WHERE T.POLICY_ID = :B6 AND (( T.TYPE_ID = :B5 AND :B1 <= 
+  T.VALUE AND :B2 >= T.VALUE ) OR ( T.TYPE_ID = :B4 AND :B1 >= T.VALUE AND 
+  :B2 <= T.VALUE ) OR ( T.TYPE_ID = :B3 AND ABS(:B2 - :B1 ) >= T.VALUE ))
+
+
+call     count       cpu    elapsed       disk      query    current        rows
+------- ------  -------- ---------- ---------- ---------- ----------  ----------
+Parse        1      0.00       0.00          0          0          0           0
+Execute   2000      0.82       0.78          0          0          0           0
+Fetch     2000      0.03       0.03          0       3000          0        2000
+------- ------  -------- ---------- ---------- ---------- ----------  ----------
+total     4001      0.85       0.81          0       3000          0        2000
+
+Misses in library cache during parse: 0
+Misses in library cache during execute: 1
+Optimizer mode: ALL_ROWS
+Parsing user id: 977     (recursive depth: 1)
+
+Rows     Row Source Operation
+-------  ---------------------------------------------------
+   2000  SORT AGGREGATE (cr=3000 pr=0 pw=0 time=45744 us)
+    900   TABLE ACCESS BY INDEX ROWID AE_THRESHOLD (cr=3000 pr=0 pw=0 time=30904 us)
+   1000    INDEX RANGE SCAN AE_THRESHOLD_PROFILE_FK (cr=2000 pr=0 pw=0 time=16924 us)(object id 825819)
+
+********************************************************************************
+
+INSERT INTO AE_STATE_LOG(ID, RES_ID, PARAM_ID, VALUE) 
+VALUES
+ (AE_STATE_LOG_SEQ.NEXTVAL, :B6 , :B5 , DECODE(:B4 , :B3 , NVL(:B2 , :B1 ), 
+  :B1 ))
+
+
+call     count       cpu    elapsed       disk      query    current        rows
+------- ------  -------- ---------- ---------- ---------- ----------  ----------
+Parse        1      0.00       0.00          0          0          0           0
+Execute   1100      0.37       0.37          5         24       3515        1100
+Fetch        0      0.00       0.00          0          0          0           0
+------- ------  -------- ---------- ---------- ---------- ----------  ----------
+total     1101      0.37       0.37          5         24       3515        1100
+
+Misses in library cache during parse: 1
+Misses in library cache during execute: 1
+Optimizer mode: ALL_ROWS
+Parsing user id: 977     (recursive depth: 1)
+
+Rows     Row Source Operation
+-------  ---------------------------------------------------
+   1100  SEQUENCE  AE_STATE_LOG_SEQ (cr=110 pr=0 pw=0 time=46015 us)
+
+
+Elapsed times include waiting on following events:
+  Event waited on                             Times   Max. Wait  Total Waited
+  ----------------------------------------   Waited  ----------  ------------
+  db file sequential read                         5        0.00          0.00
+********************************************************************************
+
+update seq$ set increment$=:2,minvalue=:3,maxvalue=:4,cycle#=:5,order$=:6,
+  cache=:7,highwater=:8,audit$=:9,flags=:10 
+where
+ obj#=:1
+
+
+call     count       cpu    elapsed       disk      query    current        rows
+------- ------  -------- ---------- ---------- ---------- ----------  ----------
+Parse       60      0.00       0.00          0          0          0           0
+Execute     60      0.03       0.02          0        120        121          60
+Fetch        0      0.00       0.00          0          0          0           0
+------- ------  -------- ---------- ---------- ---------- ----------  ----------
+total      120      0.03       0.02          0        120        121          60
+
+Misses in library cache during parse: 0
+Optimizer mode: CHOOSE
+Parsing user id: SYS   (recursive depth: 2)
+
+Rows     Row Source Operation
+-------  ---------------------------------------------------
+      1  UPDATE  SEQ$ (cr=2 pr=0 pw=0 time=330 us)
+      1   INDEX UNIQUE SCAN I_SEQ1 (cr=2 pr=0 pw=0 time=35 us)(object id 102)
+
+********************************************************************************
+
+UPDATE AE_STATE SET VALUE = :B3 , DATETIME = CURRENT_TIMESTAMP 
+WHERE
+ RES_ID = :B2 AND PARAM_ID = :B1 
+
+
+call     count       cpu    elapsed       disk      query    current        rows
+------- ------  -------- ---------- ---------- ---------- ----------  ----------
+Parse        1      0.00       0.00          0          0          0           0
+Execute   2000      0.39       0.37          0       5899       1945        1899
+Fetch        0      0.00       0.00          0          0          0           0
+------- ------  -------- ---------- ---------- ---------- ----------  ----------
+total     2001      0.39       0.37          0       5899       1945        1899
+
+Misses in library cache during parse: 0
+Misses in library cache during execute: 1
+Optimizer mode: ALL_ROWS
+Parsing user id: 977     (recursive depth: 1)
+
+Rows     Row Source Operation
+-------  ---------------------------------------------------
+      0  UPDATE  AE_STATE (cr=5899 pr=0 pw=0 time=97694 us)
+   1899   TABLE ACCESS BY INDEX ROWID AE_STATE (cr=5899 pr=0 pw=0 time=36393 us)
+   1899    INDEX RANGE SCAN AE_STATE_RES_FK (cr=4000 pr=0 pw=0 time=22106 us)(object id 813807)
+
+********************************************************************************
+
+INSERT INTO AE_STATE(ID, PARAM_ID, RES_ID, VALUE) 
+VALUES
+ (AE_STATE_SEQ.NEXTVAL, :B3 , :B2 , :B1 )
+
+
+call     count       cpu    elapsed       disk      query    current        rows
+------- ------  -------- ---------- ---------- ---------- ----------  ----------
+Parse        1      0.00       0.00          0          0          0           0
+Execute    101      0.02       0.02          0          3       1028         101
+Fetch        0      0.00       0.00          0          0          0           0
+------- ------  -------- ---------- ---------- ---------- ----------  ----------
+total      102      0.02       0.02          0          3       1028         101
+
+Misses in library cache during parse: 0
+Misses in library cache during execute: 1
+Optimizer mode: ALL_ROWS
+Parsing user id: 977     (recursive depth: 1)
+
+Rows     Row Source Operation
+-------  ---------------------------------------------------
+    101  SEQUENCE  AE_STATE_SEQ (cr=10 pr=0 pw=0 time=5015 us)
+
+********************************************************************************
+
+SELECT R.ID 
+FROM
+ AE_RESOURCE R WHERE R.DEVICE_ID = :B2 AND R.TYPE_ID = :B1 
+
+
+call     count       cpu    elapsed       disk      query    current        rows
+------- ------  -------- ---------- ---------- ---------- ----------  ----------
+Parse        1      0.00       0.00          0          0          0           0
+Execute   2000      0.19       0.20          0          0          0           0
+Fetch     2000      0.05       0.03          0       8000          0        2000
+------- ------  -------- ---------- ---------- ---------- ----------  ----------
+total     4001      0.24       0.24          0       8000          0        2000
+
+Misses in library cache during parse: 0
+Optimizer mode: ALL_ROWS
+Parsing user id: 977     (recursive depth: 1)
+
+Rows     Row Source Operation
+-------  ---------------------------------------------------
+   2000  TABLE ACCESS BY INDEX ROWID AE_RESOURCE (cr=8000 pr=0 pw=0 time=40457 us)
+   2000   INDEX RANGE SCAN AE_RES_DEV_TYPE_FK (cr=6000 pr=0 pw=0 time=27874 us)(object id 823581)
+
+********************************************************************************
+
+COMMIT WRITE NOWAIT
+
+
+call     count       cpu    elapsed       disk      query    current        rows
+------- ------  -------- ---------- ---------- ---------- ----------  ----------
+Parse        1      0.00       0.00          0          0          0           0
+Execute      1      0.00       0.00          0          0          1           0
+Fetch        0      0.00       0.00          0          0          0           0
+------- ------  -------- ---------- ---------- ---------- ----------  ----------
+total        2      0.00       0.00          0          0          1           0
+
+Misses in library cache during parse: 0
+Parsing user id: 977     (recursive depth: 1)
+
+
+
+********************************************************************************
+
+OVERALL TOTALS FOR ALL NON-RECURSIVE STATEMENTS
+
+call     count       cpu    elapsed       disk      query    current        rows
+------- ------  -------- ---------- ---------- ---------- ----------  ----------
+Parse        4      0.00       0.00          0          0          0           0
+Execute      4      4.35       4.31          5     136053       6610           3
+Fetch        1      0.00       0.00          0          9          0           1
+------- ------  -------- ---------- ---------- ---------- ----------  ----------
+total        9      4.35       4.31          5     136062       6610           4
+
+Misses in library cache during parse: 2
+Misses in library cache during execute: 2
+
+Elapsed times include waiting on following events:
+  Event waited on                             Times   Max. Wait  Total Waited
+  ----------------------------------------   Waited  ----------  ------------
+  SQL*Net message to client                       6        0.00          0.00
+  SQL*Net message from client                     6        0.23          0.34
+  SQL*Net more data from client                  41        0.00          0.00
+
+
+OVERALL TOTALS FOR ALL RECURSIVE STATEMENTS
+
+call     count       cpu    elapsed       disk      query    current        rows
+------- ------  -------- ---------- ---------- ---------- ----------  ----------
+Parse       77      0.00       0.00          0          0          0           0
+Execute  17270      2.97       2.92          5       6046       6610        3160
+Fetch    14013      0.49       0.49          1     129930          0       13909
+------- ------  -------- ---------- ---------- ---------- ----------  ----------
+total    31360      3.48       3.43          6     135976       6610       17069
+
+Misses in library cache during parse: 8
+Misses in library cache during execute: 11
+
+Elapsed times include waiting on following events:
+  Event waited on                             Times   Max. Wait  Total Waited
+  ----------------------------------------   Waited  ----------  ------------
+  db file sequential read                         6        0.00          0.00
+
+   14  user  SQL statements in session.
+   68  internal SQL statements in session.
+   82  SQL statements in session.
+********************************************************************************
+Trace file: collection.trc
+Trace file compatibility: 10.01.00
+Sort options: default
+
+       1  session in tracefile.
+      14  user  SQL statements in trace file.
+      68  internal SQL statements in trace file.
+      82  SQL statements in trace file.
+      22  unique SQL statements in trace file.
+  364287  lines in trace file.
+       4  elapsed seconds in trace file.
+
+
